@@ -7,6 +7,11 @@
 
 static uint_fast32_t nth_bit(uint64_t used, uint8_t bit);
 
+hand_indexer_t preflop_indexer;
+hand_indexer_t flop_indexer;
+hand_indexer_t turn_indexer;
+hand_indexer_t river_indexer;
+
 void test_full(hand_indexer_t * indexer) {
   uint_fast32_t total_cards = 0; for(uint_fast32_t i=0; i<indexer->rounds; ++i) {
     total_cards += indexer->cards_per_round[i];
@@ -83,6 +88,13 @@ void test_random(hand_indexer_t * indexer) {
     hand_unindex(indexer, indexer->rounds-1, index, cards);
     assert(hand_index_last(indexer, cards) == index);
   }
+}
+
+void init() {
+  assert(hand_indexer_init(1, (uint8_t[]){2}, &preflop_indexer));
+  assert(hand_indexer_init(2, (uint8_t[]){2, 3}, &flop_indexer));
+  assert(hand_indexer_init(3, (uint8_t[]){2, 3, 1}, &turn_indexer));
+  assert(hand_indexer_init(4, (uint8_t[]){2, 3, 1, 1}, &river_indexer));
 }
 
 int main(int argc, char ** argv) {
